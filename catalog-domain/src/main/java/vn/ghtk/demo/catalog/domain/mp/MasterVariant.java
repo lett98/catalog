@@ -1,10 +1,12 @@
 package vn.ghtk.demo.catalog.domain.mp;
 
-import vn.ghtk.demo.catalog.common.util.CollectionUtil;
+import vn.ghtk.demo.catalog.common.utils.CollectionUtil;
 import vn.ghtk.demo.catalog.domain.ImageUrl;
 import vn.ghtk.demo.catalog.domain.attribute.AttributeValue;
 import vn.ghtk.demo.catalog.domain.common.DomainEntity;
 import vn.ghtk.demo.catalog.domain.common.id.IdGeneratorFactory;
+import vn.ghtk.demo.catalog.domain.mp.exception.PublishMasterVariantException;
+import vn.ghtk.demo.catalog.domain.mp.spec.EditMasterVariantSpec;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,24 +18,27 @@ public class MasterVariant extends DomainEntity<MasterVariantId> {
     private MasterVariantName name;
     private List<ImageUrl> images;
 
-    private MasterVariant(MasterVariantId id) {
-        super(id);
-    }
-
     MasterVariant(List<AttributeValue> attributeValues,
                   String name,
                   String codeValue,
-                  VariantCodeType codeType,
-                  List<String> imageUrls) {
+                  VariantCodeType codeType) {
         super(new MasterVariantId(IdGeneratorFactory.integerNumberGenerator().generateId()));
         this.attributeValues = attributeValues;
         this.name = new MasterVariantName(name);
         this.code = new MasterVariantCode(codeValue,codeType);
         this.status = MasterVariantStatus.DRAFT;
-        this.images = imageUrls.isEmpty() ? new ArrayList<>() : imageUrls.stream().map(ImageUrl::new).toList();
+        this.images = new ArrayList<>();
+    }
+
+    void editVariant(EditMasterVariantSpec spec) {
+        this.name = spec.name();
+        this.images = new ArrayList<>(spec.images());
     }
 
     void publishVariant() {
+        if (images.isEmpty()) {
+            throw new PublishMasterVariantException(this.id);
+        }
         this.status = MasterVariantStatus.PUBLISHED;
     }
 
@@ -42,6 +47,6 @@ public class MasterVariant extends DomainEntity<MasterVariantId> {
     }
 
     boolean hasAttributes(List<AttributeValue> searchAttributes) {
-        return CollectionUtil.compare(attributeValues, searchAttributes);
+        return CollectionUtil.equals(attributeValues, searchAttributes);
     }
 }

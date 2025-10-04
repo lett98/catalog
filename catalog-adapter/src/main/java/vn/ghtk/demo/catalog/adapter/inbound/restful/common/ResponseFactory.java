@@ -30,12 +30,12 @@ public class ResponseFactory {
         return new ResponseEntity<>(response, httpStatus);
     }
 
-    public static <T> ResponseEntity<BaseResponse<T>> error(HttpStatus httpStatus, String message, T data) {
+    public static <T> ResponseEntity<BaseResponse<T>> error(HttpStatus httpStatus, String message) {
         BaseResponse response = BaseResponse.builder()
                 .success(false)
                 .timestamp(LocalDateTime.now().toString())
                 .message(message)
-                .data(data).build();
+                .data(null).build();
         return new ResponseEntity<>(response, httpStatus);
     }
 

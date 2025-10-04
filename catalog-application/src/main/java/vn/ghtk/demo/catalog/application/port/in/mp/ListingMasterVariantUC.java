@@ -1,6 +1,6 @@
 package vn.ghtk.demo.catalog.application.port.in.mp;
 
-import vn.ghtk.demo.catalog.application.port.out.mp.MasterVariantRepository;
+import vn.ghtk.demo.catalog.application.port.out.mp.ListingMasterVariantOp;
 import vn.ghtk.demo.catalog.domain.mp.MasterProductId;
 import vn.ghtk.demo.catalog.domain.mp.MasterVariant;
 import vn.ghtk.demo.catalog.domain.mp.MasterVariantId;
@@ -8,19 +8,19 @@ import vn.ghtk.demo.catalog.domain.mp.MasterVariantId;
 import java.util.List;
 
 public class ListingMasterVariantUC implements ListingMasterVariant {
-    private final MasterVariantRepository masterVariantRepository;
+    private final ListingMasterVariantOp listingMasterVariantOp;
 
-    public ListingMasterVariantUC(MasterVariantRepository masterVariantRepository) {
-        this.masterVariantRepository = masterVariantRepository;
+    public ListingMasterVariantUC(ListingMasterVariantOp listingMasterVariantOp) {
+        this.listingMasterVariantOp = listingMasterVariantOp;
     }
 
     @Override
     public MasterVariant findVariantById(MasterVariantId masterVariantId) {
-        return masterVariantRepository.getMasterVariantById(masterVariantId);
+        return listingMasterVariantOp.getMasterVariantById(masterVariantId);
     }
 
     @Override
     public List<MasterVariant> findVariantsOfProduct(MasterProductId masterProductId) {
-        return masterVariantRepository.getProductVariants(masterProductId);
+        return listingMasterVariantOp.getProductVariants(masterProductId);
     }
 }

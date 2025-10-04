@@ -5,7 +5,9 @@ import vn.ghtk.demo.catalog.domain.mp.MasterProduct;
 import vn.ghtk.demo.catalog.domain.mp.MasterProductId;
 
 public interface MasterProductRepository {
-    MasterProduct  findProductById(MasterProductId masterProductId);
+    MasterProduct findProductById(MasterProductId masterProductId);
     PagedResult<MasterProduct> listProducts(MasterProductListCriteria productListCriteria);
+
+    void save(MasterProduct masterProduct);
 
 }

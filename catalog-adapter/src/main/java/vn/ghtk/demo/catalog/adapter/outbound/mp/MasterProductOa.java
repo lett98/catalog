@@ -23,4 +23,9 @@ public class MasterProductOa implements MasterProductRepository {
     public PagedResult<MasterProduct> listProducts(MasterProductListCriteria productListCriteria) {
         return null;
     }
+
+    @Override
+    public void save(MasterProduct masterProduct) {
+
+    }
 }

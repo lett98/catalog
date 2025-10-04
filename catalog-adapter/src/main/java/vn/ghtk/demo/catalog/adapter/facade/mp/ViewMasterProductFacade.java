@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.mp.response.MasterProductDto;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.mp.response.MasterProductListDto;
 import vn.ghtk.demo.catalog.application.port.in.mp.ListingMasterProduct;
-import vn.ghtk.demo.catalog.application.port.in.mp.MasterProductListQuery;
+import vn.ghtk.demo.catalog.application.port.in.mp.input.MasterProductListQuery;
 import vn.ghtk.demo.catalog.common.PagedResult;
 import vn.ghtk.demo.catalog.domain.mp.MasterProduct;
 import vn.ghtk.demo.catalog.domain.mp.MasterProductId;
@@ -30,7 +30,7 @@ public class ViewMasterProductFacade {
                 .stream()
                 .map(this::domainToDtoList)
                 .toList();
-        return new PagedResult<MasterProductListDto>(productListDto, pagedProducts.total());
+        return new PagedResult<>(productListDto, pagedProducts.total());
     }
 
     private MasterProductListDto domainToDtoList(MasterProduct masterProduct) {

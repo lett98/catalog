@@ -2,12 +2,9 @@ package vn.ghtk.demo.catalog.adapter.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import vn.ghtk.demo.catalog.application.port.in.mp.ListingMasterProduct;
-import vn.ghtk.demo.catalog.application.port.in.mp.ListingMasterProductUC;
-import vn.ghtk.demo.catalog.application.port.in.mp.ListingMasterVariant;
-import vn.ghtk.demo.catalog.application.port.in.mp.ListingMasterVariantUC;
+import vn.ghtk.demo.catalog.application.port.in.mp.*;
 import vn.ghtk.demo.catalog.application.port.out.mp.MasterProductRepository;
-import vn.ghtk.demo.catalog.application.port.out.mp.MasterVariantRepository;
+import vn.ghtk.demo.catalog.application.port.out.mp.ListingMasterVariantOp;
 
 @Configuration
 public class SpringConfiguration {
@@ -18,12 +15,17 @@ public class SpringConfiguration {
     }
 
     @Bean
-    public ListingMasterVariant listingMasterVariant(MasterVariantRepository masterVariantRepository) {
-        return new ListingMasterVariantUC(masterVariantRepository);
+    public ListingMasterVariant listingMasterVariant(ListingMasterVariantOp listingMasterVariantOp) {
+        return new ListingMasterVariantUC(listingMasterVariantOp);
     }
 
-//    @Bean
-//    public ListingSku listingSku(SkuRepository skuRepository) {
-//        return new ListingSkuUC(skuRepository);
-//    }
+    @Bean
+    public MasterVariantIp masterVariantIp(MasterProductRepository masterProductRepository) {
+        return new MasterVariantUC(masterProductRepository);
+    }
+
+    @Bean
+    public MasterProductIp masterProductIp(MasterProductRepository masterProductRepository) {
+        return new MasterProductUC(masterProductRepository);
+    }
 }

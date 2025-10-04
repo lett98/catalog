@@ -1,4 +1,4 @@
-package vn.ghtk.demo.catalog.application.port.in.mp;
+package vn.ghtk.demo.catalog.application.port.in.mp.input;
 
 import java.util.List;
 

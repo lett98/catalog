@@ -6,7 +6,7 @@ import vn.ghtk.demo.catalog.domain.mp.MasterVariantId;
 
 import java.util.List;
 
-public interface MasterVariantRepository {
+public interface ListingMasterVariantOp {
     MasterVariant getMasterVariantById(MasterVariantId masterVariantId);
     List<MasterVariant> getProductVariants(MasterProductId masterProductId);
 }

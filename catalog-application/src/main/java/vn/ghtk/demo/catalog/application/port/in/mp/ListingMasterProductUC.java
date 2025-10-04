@@ -1,6 +1,7 @@
 package vn.ghtk.demo.catalog.application.port.in.mp;
 
 
+import vn.ghtk.demo.catalog.application.port.in.mp.input.MasterProductListQuery;
 import vn.ghtk.demo.catalog.application.port.out.mp.MasterProductListCriteria;
 import vn.ghtk.demo.catalog.application.port.out.mp.MasterProductRepository;
 import vn.ghtk.demo.catalog.common.PagedResult;
