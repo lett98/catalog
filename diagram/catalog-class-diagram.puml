@@ -1,0 +1,139 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+
+package "catalog" {
+    package "mp" <<aggregate boundary>> {
+        class MasterProduct <<Aggregate Root>> {
+            - id: MasterProductId
+            - title: MasterProductTitle
+            - categoryId: CategoryId
+            - basePrice: Price
+            - description: String
+            - status: MasterProductStatus
+            - variants: List<MasterVariant>
+            --
+            + static create(todo): MasterProduct
+            + editProduct(todo): void
+            + updateBasePrice(price: Price): void
+            + publicProduct(): void
+            + retireProduct(): void
+
+            + addVariant(variant: MasterVariant): void
+            + editVariant(todo): void
+            + publicVariant(variantId: MasterVariantId): void
+            + retireVariant(variantId: MasterVariantId): void
+        }
+        MasterProduct ..> MasterVariant
+        MasterProduct ..> MasterProductStatus
+        MasterProduct ..> MasterProductTitle
+
+
+        enum MasterProductStatus {
+            - status: short
+            DRAFT(1)
+            PUBLISHED(2)
+            RETIRED(3)
+        }
+        class MasterProductTitle <<Value Object>> {
+            - title: String
+            - model: String
+            - brandId: BrandId
+            --
+            ~ getProductTitle(): String
+        }
+
+        class MasterVariant <<Domain Entity>> {
+            - id: MasterVariantId
+            - name: MasterVariantName
+            - code: MasterVariantCode
+            - status: MasterVariantStatus
+            - attributes: List<MasterVariantAttribute>
+            - images: List<Url>
+            --
+            ~ static create(todo): MasterVariant
+            ~ editVariant(todo): void
+            ~ publicVariant(variantId: MasterVariantId): void
+            ~ retireVariant(variantId: MasterVariantId): void
+        }
+        MasterVariant ..> MasterVariantId
+        MasterVariant ..> MasterVariantStatus
+        MasterVariant ..> MasterVariantAttribute
+
+        class MasterVariantId <<Domain Identity>> {
+            - id: Integer
+        }
+        class MasterVariantAttribute <<Domain Entity>> {
+            - id: Long
+            - attributeValue: AttributeValue
+        }
+
+        enum MasterVariantStatus {
+            - status: short
+            DRAFT(1)
+            PUBLISHED(2)
+            RETIRED(3)
+        }
+    }
+    MasterVariantAttribute ..> AttributeValue
+
+package "category" <<aggregate boundary>> {
+    class Category <<Domain Entity>> {
+        - id: CategoryId
+        - attributeSet: List<AttributeSet>
+    }
+    Category ..> CategoryId
+    Category ..> AttributeSet
+
+    class AttributeSet <<Value Object>> {
+        - attributeId: AttributeId
+        - mandatory: Boolean
+    }
+
+    class CategoryId <<Domain Identity>> {
+        - id: Integer
+    }
+}
+MasterProduct ..> CategoryId
+
+package "sku" <<aggregate boundary>> {
+    class SKU <<Aggregate Root>> {
+        - id: SkuCode
+        - merchantId: MerchantId
+        - masterVariantId: MasterVariantId
+        - addAttributes: List<AttributeValue>
+        - offers: List<Offer>
+        - inventory: Inventory
+        --
+        + static create(todo): SKU
+        + addOffer(offer: Offer): void
+        + publishOffer(offerId: OfferId): void
+        + currentOffer(): Offer
+    }
+    SKU ..> Offer
+    SKU ..> MasterVariantId
+    SKU ..> AttributeValue
+
+    class Offer <<Domain Entity>> {
+        - id: OfferId
+        - code: OfferCode
+        - status: OfferStatus
+        - salePrice: Price
+        - policies: List<Policy>
+    }
+    Offer ..> OfferStatus
+
+    enum OfferStatus {
+        - status: short
+        ACTIVE(1)
+        INACTIVE(0)
+    }
+}
+
+    class AttributeValue <<Value Object>> {
+         - attributeId: AttributeId
+         - value: Object
+    }
+}
+
+@enduml

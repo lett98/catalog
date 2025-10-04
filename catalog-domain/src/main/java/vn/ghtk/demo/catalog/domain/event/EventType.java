@@ -1,0 +1,11 @@
+package vn.ghtk.demo.catalog.domain.event;
+
+public enum EventType {
+    MASTER_PRODUCT_CREATED,
+    MASTER_PRODUCT_PUBLISHED,
+    MASTER_PRODUCT_RETIRED,
+    MASTER_VARIANT_CREATED,
+    MASTER_VARIANT_PUBLISHED,
+    MASTER_VARIANT_RETIRED,
+    SKU_CREATED
+}

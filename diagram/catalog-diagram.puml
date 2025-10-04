@@ -1,0 +1,171 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+
+package "catalog" {
+   package "mp" <<aggregate boundary>> {
+        class MasterProduct <<Aggregate Root>>{
+            - id: MasterProductId
+            - title: MasterProductTitle
+            - categoryId: CategoryId
+            - basePrice: Money
+            - description: String
+            - status: MasterProductStatus
+            - attributeConfigs: List<AttributeConfig>
+            - masterVariants: List<MasterVariant>
+            --
+            + static create(todo): MasterProduct
+            + editProduct(todo): void
+            + publicProduct(): void
+            + retireProduct(): void
+            + updateBasePrice(price: Money): void
+
+            + addMasterVariant(todo): MasterVariant
+            + editVariant(todo): void
+            + publicVariant(variantId: MasterVariantId): void
+            + retireVariant(variantId: MasterVariantId): void
+        }
+        MasterProduct ..> MasterProductId
+        MasterProduct ..> MasterProductTitle
+        MasterProduct ..> MasterVariant
+        MasterProduct ..> AttributeConfig
+        MasterProduct ..> MasterProductStatus
+        MasterProduct ..> CategoryId
+
+        enum MasterProductStatus {
+            - status: short
+            DRAFT(1)
+            PUBLISHED(2)
+            RETIRED(3)
+        }
+
+        class Category <<Domain Entity>> {
+            - id: CategoryId
+            - (todo)
+        }
+        Category ..> CategoryId
+
+        class CategoryId <<Domain Identity>> {
+            - id: Long
+        }
+
+
+
+        class MasterProductTitle <<Value Object>> {
+            - model: String
+            - brandId: BrandId
+            --
+            ~ productTitle(): String
+        }
+        class MasterProductId <<Domain Identity>> {
+            - id: Integer
+        }
+
+        class AttributeConfig <<Value Object>> {
+            - attributeId: AttributeId
+            - mandatory: Boolean
+        }
+
+        class MasterVariant <<Domain Entity>> {
+            - id: MasterVariantId
+            - name: MasterVariantName
+            - code: MasterVariantCode
+            - status: MasterVariantStatus
+            - attributeValues: List<AttributeValue>
+            - imageUrls: List<Url>
+            --
+            ~ static create(todo): MasterVariant
+            ~ editVariant(todo): void
+            ~ publicVariant(): void
+            ~ retireVariant(): void
+        }
+        MasterVariant ..> MasterVariantId
+        MasterVariant ..> MasterVariantCode
+        MasterVariant ..> MasterVariantStatus
+
+        enum MasterVariantStatus {
+            - status: short
+            DRAFT(1)
+            PUBLISHED(2)
+            RETIRED(3)
+        }
+
+        class MasterVariantCode <<Value Object>> {
+            - code: String
+            - type: Enum
+        }
+
+        class MasterVariantId <<Domain Identity>> {
+            - id: Integer
+        }
+   }
+
+   MasterVariant ..> AttributeValue
+
+   class AttributeValue <<Value Object>> {
+      - attributeId: AttributeId
+      - value: Value
+   }
+}
+
+package "listing" {
+
+    package "sku" <<aggregate boundary>> {
+        class SKU <<Aggregate Root>> {
+            - id: SkuId
+            - code: SkuCode
+            - merchantId: MerchantId
+            - masterVariantId: MasterVariantId
+            - additionalAttributes: List<AttributeValue>
+            --
+            + static create(todo): SKU
+        }
+        SKU ..> MasterVariantId
+        SKU ..> AttributeValue
+        SKU ..> SkuId
+        SKU ..> SkuCode
+
+        class SkuId <<Domain Identity>> {
+            - id: Long
+        }
+
+        class SkuCode <<Value Object>> {
+            - code: String
+        }
+    }
+}
+
+    package "offer" <<aggregate boundary>> {
+        class Offer <<Aggregate Root>> {
+           - id: OfferId
+           - merchantId: MerchantId
+           - sku: SkuId
+           - code: OfferCode
+           - status: OfferStatus
+           - offerPrice: Money
+           - policies: List<OfferPolicy>
+           - inventories: List<Inventory>
+           - stocks: List<Stock>
+           - startDate: Date
+           - endDate: Date
+           --
+           + static create(todo): Offer
+           + activateOffer(): void
+           + cancelOffer(): void
+           + pauseOffer(): void
+       }
+       Offer ..> OfferStatus
+       Offer ..> SkuId
+
+       enum OfferStatus {
+           - status: short
+           DRAFT(1)
+           ACTIVE(2)
+           OUT_OF_STOCK(3)
+           PAUSED(4)
+           EXPIRED(5)
+           CANCELLED(9)
+       }
+    }
+}
+@enduml
