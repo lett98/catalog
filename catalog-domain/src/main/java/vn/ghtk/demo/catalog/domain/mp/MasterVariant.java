@@ -49,4 +49,24 @@ public class MasterVariant extends DomainEntity<MasterVariantId> {
     boolean hasAttributes(List<AttributeValue> searchAttributes) {
         return CollectionUtil.equals(attributeValues, searchAttributes);
     }
+
+    public MasterVariantStatus status() {
+        return status;
+    }
+
+    public MasterVariantName name() {
+        return name;
+    }
+
+    public MasterVariantCode code() {
+        return code;
+    }
+
+    public List<ImageUrl> images() {
+        return images;
+    }
+
+    public List<AttributeValue> attributeValues() {
+        return attributeValues;
+    }
 }
