@@ -12,12 +12,14 @@ import vn.ghtk.demo.catalog.adapter.facade.mp.MasterProductFacade;
 import vn.ghtk.demo.catalog.adapter.facade.mp.ViewMasterProductFacade;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.common.BaseResponse;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.common.ResponseFactory;
+import vn.ghtk.demo.catalog.adapter.inbound.restful.mp.request.CreateProductRequest;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.mp.request.EditMasterProductRequest;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.mp.request.UpdateMPPriceRequest;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.mp.response.MPOperationResult;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.mp.response.MasterProductDto;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.mp.response.MasterProductListDto;
 import vn.ghtk.demo.catalog.common.PagedResult;
+import vn.ghtk.demo.catalog.common.exception.FoundedException;
 import vn.ghtk.demo.catalog.domain.mp.exception.NotFoundMPException;
 
 import java.util.List;
@@ -53,6 +55,19 @@ public class MasterProductController {
             return ResponseFactory.success(response);
         } catch (Exception e) {
             log.error("Error getMasterProduct {}", masterProductId, e);
+            return ResponseFactory.error(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping()
+    public ResponseEntity<BaseResponse<MPOperationResult>> createMasterProduct(@RequestBody CreateProductRequest request) {
+        try {
+            MPOperationResult response = masterProductFacade.createMasterProduct(request);
+            return ResponseFactory.success(response);
+        } catch (FoundedException e) {
+            return ResponseFactory.error(HttpStatus.FOUND, e.getMessage());
+        } catch (Exception e) {
+            log.error("Error createMasterProduct", e);
             return ResponseFactory.error(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

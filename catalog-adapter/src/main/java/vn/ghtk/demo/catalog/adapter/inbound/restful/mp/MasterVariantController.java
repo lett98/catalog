@@ -11,6 +11,8 @@ import vn.ghtk.demo.catalog.adapter.facade.mp.ViewMasterVariantFacade;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.common.BaseResponse;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.common.ResponseFactory;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.mp.request.CreateVariantRequest;
+import vn.ghtk.demo.catalog.adapter.inbound.restful.mp.request.EditMasterProductRequest;
+import vn.ghtk.demo.catalog.adapter.inbound.restful.mp.request.EditMasterVariantRequest;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.mp.response.MVOperationResult;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.mp.response.MasterVariantDto;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.mp.response.MasterVariantListDto;
@@ -65,6 +67,19 @@ public class MasterVariantController {
             return ResponseFactory.error(HttpStatus.NOT_ACCEPTABLE, e.getMessage());
         } catch (Exception e) {
             log.error("Error addVariant for MasterProduct {}", request.getMasterProductId(), e);
+            return ResponseFactory.error(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<BaseResponse<Void>> editMasterVariant(@RequestBody EditMasterVariantRequest request) {
+        try {
+            masterVariantFacade.editMasterVariant(request);
+            return ResponseFactory.success(null);
+        } catch (NotFoundMPException | NotFoundMVException e) {
+            return ResponseFactory.error(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (Exception e) {
+            log.error("Error editMasterVariant {}", request.getMasterVariantId(), e);
             return ResponseFactory.error(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

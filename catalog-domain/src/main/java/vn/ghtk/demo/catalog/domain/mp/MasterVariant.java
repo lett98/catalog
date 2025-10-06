@@ -22,7 +22,7 @@ public class MasterVariant extends DomainEntity<MasterVariantId> {
                   String name,
                   String codeValue,
                   VariantCodeType codeType) {
-        super(new MasterVariantId(IdGeneratorFactory.integerNumberGenerator().generateId()));
+        super(new MasterVariantId(IdGeneratorFactory.integerIdGenerator().generateId()));
         this.attributeValues = attributeValues;
         this.name = new MasterVariantName(name);
         this.code = new MasterVariantCode(codeValue,codeType);

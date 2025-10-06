@@ -1,7 +1,6 @@
 package vn.ghtk.demo.catalog.domain.mp;
 
 import vn.ghtk.demo.catalog.common.exception.FoundedException;
-import vn.ghtk.demo.catalog.domain.BrandId;
 import vn.ghtk.demo.catalog.domain.Money;
 import vn.ghtk.demo.catalog.domain.attribute.AttributeConfig;
 import vn.ghtk.demo.catalog.domain.attribute.AttributeId;
@@ -35,18 +34,13 @@ public class MasterProduct extends DomainAggregate<MasterProductId> {
     private List<MasterVariant> variants;
 
     public MasterProduct(CategoryId categoryId,
-                         BrandId brandId,
-                         String model,
-                         String title,
-                         String description,
-                         List<AttributeConfig> attributeConfigs) {
-        this.id = new MasterProductId(IdGeneratorFactory.integerNumberGenerator().generateId());
+                         MasterProductTitle title) {
+        this.id = new MasterProductId(IdGeneratorFactory.integerIdGenerator().generateId());
         this.categoryId = categoryId;
-        this.title = new MasterProductTitle(title, model, brandId);
-        this.description = description;
-        this.attributeConfigs = attributeConfigs;
+        this.title = title;
         this.status = MasterProductStatus.DRAFT;
         this.variants = new ArrayList<>();
+        this.attributeConfigs = new ArrayList<>();
         DomainEventCollector.addEvent(new MasterProductCreatedEvent(this.id));
     }
 

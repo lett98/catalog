@@ -2,6 +2,7 @@ package vn.ghtk.demo.catalog.adapter.facade.mp;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.mp.request.AttributeValueRequest;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.mp.request.CreateVariantRequest;
 import vn.ghtk.demo.catalog.adapter.inbound.restful.mp.request.EditMasterVariantRequest;
@@ -23,6 +24,7 @@ import java.util.Objects;
 public class MasterVariantFacade {
     private final MasterVariantIp masterVariantIp;
 
+    @Transactional
     public MVOperationResult createMasterVariant(CreateVariantRequest request) {
         AddMasterVariantCmd cmd = new AddMasterVariantCmd(
                 new MasterProductId(request.getMasterProductId()),
@@ -34,6 +36,7 @@ public class MasterVariantFacade {
         return new MVOperationResult(newVariantId, MasterVariantStatus.DRAFT);
     }
 
+    @Transactional
     public void editMasterVariant(EditMasterVariantRequest request) {
         EditMasterVariantCmd cmd = new EditMasterVariantCmd(
                 new MasterProductId(request.getMasterProductId()),
@@ -45,11 +48,13 @@ public class MasterVariantFacade {
         masterVariantIp.editVariant(cmd);
     }
 
+    @Transactional
     public MVOperationResult publishMasterVariant(Integer masterProductId, Integer masterVariantId) {
         masterVariantIp.publishVariant(new MasterProductId(masterProductId), new MasterVariantId(masterVariantId));
         return new MVOperationResult(new MasterVariantId(masterVariantId), MasterVariantStatus.PUBLISHED);
     }
 
+    @Transactional
     public MVOperationResult retireMasterVariant(Integer masterProductId, Integer masterVariantId) {
         masterVariantIp.retireVariant(new MasterProductId(masterProductId), new MasterVariantId(masterVariantId));
         return new MVOperationResult(new MasterVariantId(masterVariantId), MasterVariantStatus.RETIRED);

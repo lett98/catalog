@@ -1,10 +1,14 @@
 package vn.ghtk.demo.catalog.application.port.in.mp;
 
+import vn.ghtk.demo.catalog.application.port.in.mp.input.CreateProductCmd;
 import vn.ghtk.demo.catalog.application.port.in.mp.input.EditMasterProductCmd;
 import vn.ghtk.demo.catalog.application.port.in.mp.input.UpdateMPPriceCmd;
 import vn.ghtk.demo.catalog.application.port.out.mp.MasterProductRepository;
+import vn.ghtk.demo.catalog.application.port.out.mp.SearchMasterProductCriteria;
+import vn.ghtk.demo.catalog.common.exception.FoundedException;
 import vn.ghtk.demo.catalog.domain.mp.MasterProduct;
 import vn.ghtk.demo.catalog.domain.mp.MasterProductId;
+import vn.ghtk.demo.catalog.domain.mp.MasterProductTitle;
 import vn.ghtk.demo.catalog.domain.mp.exception.NotFoundMPException;
 
 public class MasterProductUC implements MasterProductIp {
@@ -12,6 +16,20 @@ public class MasterProductUC implements MasterProductIp {
 
     public MasterProductUC(MasterProductRepository masterProductRepository) {
         this.masterProductRepository = masterProductRepository;
+    }
+
+    @Override
+    public MasterProductId createProduct(CreateProductCmd cmd) {
+        SearchMasterProductCriteria criteria = new SearchMasterProductCriteria(cmd.brandId(), cmd.model());
+        MasterProduct oldProduct = masterProductRepository.searchProduct(criteria);
+        if (oldProduct != null) {
+            throw new FoundedException("MasterProduct already exists, id = [" + oldProduct.id().id()+ "]");
+        }
+
+        MasterProduct newProduct = new MasterProduct(cmd.categoryId(),
+                new MasterProductTitle(cmd.title(),cmd.model(), cmd.brandId()));
+        masterProductRepository.save(newProduct);
+        return newProduct.id();
     }
 
     @Override
