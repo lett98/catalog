@@ -150,4 +150,28 @@ public class MasterProduct extends DomainAggregate<MasterProductId> {
             throw new VariantRequiredAttributeException("MasterVariant does not include all required attributes.");
         }
     }
+
+    public MasterProductStatus status() {
+        return status;
+    }
+
+    public MasterProductTitle title() {
+        return title;
+    }
+
+    public String description() {
+        return description;
+    }
+
+    public List<MasterVariant> variants() {
+        return variants;
+    }
+
+    public List<AttributeConfig> attributeConfigs() {
+        return attributeConfigs;
+    }
+
+    public Money basePrice() {
+        return basePrice;
+    }
 }

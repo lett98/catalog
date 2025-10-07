@@ -48,8 +48,8 @@ public class MasterProductController {
         }
     }
 
-    @GetMapping()
-    public ResponseEntity<BaseResponse<MasterProductDto>> getMasterProducts(@RequestParam(name = "id") Integer masterProductId) {
+    @GetMapping("/{id}")
+    public ResponseEntity<BaseResponse<MasterProductDto>> getMasterProductById(@PathVariable("id") Integer masterProductId) {
         try {
             MasterProductDto response = viewMasterProductFacade.findMasterProductById(masterProductId);
             return ResponseFactory.success(response);

@@ -32,8 +32,8 @@ public class MasterVariantController {
     private final ViewMasterVariantFacade viewMasterVariantFacade;
     private final MasterVariantFacade masterVariantFacade;
 
-    @GetMapping()
-    public ResponseEntity<BaseResponse<MasterVariantDto>> getMasterVariant(@RequestParam(name = "id") @NotNull Integer masterVariantId) {
+    @GetMapping("/{id}")
+    public ResponseEntity<BaseResponse<MasterVariantDto>> getMasterVariant(@PathVariable("id") @NotNull Integer masterVariantId) {
         try {
             MasterVariantDto response = viewMasterVariantFacade.findMasterVariantById(masterVariantId);
             return ResponseFactory.success(response);
@@ -43,8 +43,8 @@ public class MasterVariantController {
         }
     }
 
-    @GetMapping()
-    public ResponseEntity<BaseResponse<List<MasterVariantListDto>>> getMasterVariants(@RequestParam(name = "product_id") @NotNull Integer masterProductId) {
+    @GetMapping("/product/{product_id}")
+    public ResponseEntity<BaseResponse<List<MasterVariantListDto>>> getMasterVariants(@PathVariable("product_id") @NotNull Integer masterProductId) {
         try {
             List<MasterVariantListDto> response = viewMasterVariantFacade.findVariantsOfProduct(masterProductId);
             return ResponseFactory.success(response);

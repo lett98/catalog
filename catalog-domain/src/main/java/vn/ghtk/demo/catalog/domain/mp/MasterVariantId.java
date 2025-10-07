@@ -6,4 +6,8 @@ public class MasterVariantId extends DomainIdentity<Integer> {
     public MasterVariantId(Integer id) {
         super(id);
     }
+
+    public MasterVariantId(Long id) {
+        super(id.intValue());
+    }
 }
